@@ -1,6 +1,5 @@
-provider "google" {
-  project = var.gcp_project
-  region  = var.gcp_region
+provider "aws" {
+  region  = var.aws_region
 }
 
 provider "tfe" {
@@ -11,8 +10,9 @@ provider "tfe" {
 terraform {
   required_version = ">= 0.13.06"
   required_providers {
-    google = {
-      version = "~> 3.81"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
     }
     tfe = {
       version = "~>0.25"

@@ -67,7 +67,7 @@ WORKSPACE_DIR="tfc-agent-ecs-multi/files/create_tfcb_workspaces"
 BRANCH="main"
 
 # Select Terraform Version
-TF_VERSION="0.13.6"
+TF_VERSION="1.0.5"
 
 ```
 

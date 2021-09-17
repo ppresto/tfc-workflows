@@ -29,12 +29,12 @@
 address="app.terraform.io"
 organization="presto-projects"
 #  Github Repo URL
-git_url="https://github.com/ppresto/tfc-agent.git"
+git_url="https://github.com/ppresto/tfc-workflows.git"
 # Admin Workspace Config
-workspace="gke_ADMIN_IAM"
+workspace="TFC_Admin"
 # This is the repo dir TFCB will use to run terraform and manage your workspaces with IaC
-WORKSPACE_DIR="tfc-agent-gke/gke_ADMIN_IAM"
-BRANCH="master"
+WORKSPACE_DIR=""
+BRANCH="main"
 TF_VERSION="1.0.5"
 
 # set sensitive environment variables/tokens
@@ -211,45 +211,25 @@ if [ ! -z ${repository} ]; then
   upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
 fi
 
-# Build GCP Project Credentials
-if [[ ! -z ${GOOGLE_CREDENTIALS} && ! -z ${GOOGLE_PROJECT} ]]; then
-  # GOOGLE_CREDENTIALS
-  gcp_creds="$(echo ${GOOGLE_CREDENTIALS} | jq -c | sed 's/\\n/\\\\n/g' | sed 's/"/\\"/g')"
-
-  addKeyVars "gcp_credentials" "${gcp_creds}" false
-  upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
-  # add as ENV var too
-  addKeyVars "GOOGLE_CREDENTIALS" "${gcp_creds}" true "env"
+# Build AWS Credentials
+if [[ ! -z ${AWS_ACCESS_KEY} && ! -z ${AWS_SECRET_ACCESS_KEY} ]]; then
+  # AWS_ACCESS_KEY
+  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/aws_access_key_id/" -e "s/my-value/${AWS_ACCESS_KEY}/" -e "s/my-category/terraform/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
+  echo "Adding AWS_ACCESS_KEY"
   upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
 
-  # GOOGLE_PROJECT
-  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/gcp_project/" -e "s/my-value/${GOOGLE_PROJECT}/" -e "s/my-category/terraform/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
-  echo "Adding GOOGLE_PROJECT"
-  upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
-  # add as ENV var too
-  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/GOOGLE_PROJECT/" -e "s/my-value/${GOOGLE_PROJECT}/" -e "s/my-category/env/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
-  echo "Adding GOOGLE_PROJECT ENV"
+  # AWS_SECRET_ACCESS_KEY
+  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/aws_secret_access_key/" -e "s/my-value/${AWS_SECRET_ACCESS_KEY}/" -e "s/my-category/terraform/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
+  echo "Adding AWS_SECRET_ACCESS_KEY"
   upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
 
 fi
-# Set Default Region for GCP if Available
-if [[ ! -z ${GOOGLE_REGION} && ! -z ${GOOGLE_ZONE} ]]; then
-  # GOOGLE_REGION
-  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/gcp_region/" -e "s/my-value/${GOOGLE_REGION}/" -e "s/my-category/terraform/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
-  echo "Adding GOOGLE_REGION"
-  upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
-  # add as ENV var too
-  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/GOOGLE_REGION/" -e "s/my-value/${GOOGLE_REGION}/" -e "s/my-category/env/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
-  echo "Adding GOOGLE_REGION ENV"
-  upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
 
-  # GOOGLE_ZONE
-  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/gcp_zone/" -e "s/my-value/${GOOGLE_ZONE}/" -e "s/my-category/terraform/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
-  echo "Adding GOOGLE_ZONE"
-  upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
-  # add as ENV var too
-  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/GOOGLE_ZONE/" -e "s/my-value/${GOOGLE_ZONE}/" -e "s/my-category/env/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
-  echo "Adding GOOGLE_ZONE ENV"
+# Set Default AWS Region if Available
+if [[ ! -z ${AWS_DEFAULT_REGION} ]]; then
+  # AWS_DEFAULT_REGION
+  sed -e "s/my-organization/$organization/" -e "s/my-workspace/${workspace}/" -e "s/my-key/aws_default_region/" -e "s/my-value/${AWS_DEFAULT_REGION}/" -e "s/my-category/terraform/" -e "s/my-hcl/false/" -e "s/my-sensitive/false/" < variable.template.json  > variable.json
+  echo "Adding AWS_DEFAULT_REGION"
   upload_variable_result=$(curl -s --header "Authorization: Bearer $ATLAS_TOKEN" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${address}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${organization}&filter%5Bworkspace%5D%5Bname%5D=${workspace}")
 fi
 
