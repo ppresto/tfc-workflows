@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.0.5"
 }
 
-resource "tfe_workspace" "ws-vcs" {
+resource "tfe_workspace" "ws-api" {
   name              = var.workspacename
   organization      = var.organization
   terraform_version = var.tfversion
@@ -20,7 +20,7 @@ resource "tfe_variable" "tf_variables" {
   value        = each.value
   category     = "terraform"
   sensitive    = false
-  workspace_id = tfe_workspace.ws-vcs.id
+  workspace_id = tfe_workspace.ws-api.id
 }
 
 resource "tfe_variable" "tf_variables_sec" {
@@ -29,7 +29,7 @@ resource "tfe_variable" "tf_variables_sec" {
   value        = each.value
   category     = "terraform"
   sensitive    = true
-  workspace_id = tfe_workspace.ws-vcs.id
+  workspace_id = tfe_workspace.ws-api.id
 }
 
 resource "tfe_variable" "env_variables" {
@@ -38,7 +38,7 @@ resource "tfe_variable" "env_variables" {
   value        = each.value
   category     = "env"
   sensitive    = false
-  workspace_id = tfe_workspace.ws-vcs.id
+  workspace_id = tfe_workspace.ws-api.id
 }
 
 resource "tfe_variable" "env_variables_sec" {
@@ -47,5 +47,5 @@ resource "tfe_variable" "env_variables_sec" {
   value        = each.value
   category     = "env"
   sensitive    = true
-  workspace_id = tfe_workspace.ws-vcs.id
+  workspace_id = tfe_workspace.ws-api.id
 }

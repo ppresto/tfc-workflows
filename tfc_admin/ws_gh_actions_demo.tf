@@ -1,3 +1,12 @@
+data "tfe_team" "test" {
+  name         = "owner"
+  organization = var.organization
+}
+
+resource "tfe_team_token" "owner" {
+  team_id = tfe_team.test.id
+}
+
 module "gke_workspace" {
     source = "../modules/workspace-mgr-api"
     agent_pool_id     = ""
@@ -23,6 +32,6 @@ module "gke_workspace" {
     "prefix" = "presto"
     }
     tf_variables_sec = {
-        "tfe_token"      = var.tfe_token
+        "tfe_token"      = tfe_team_token.owner.token
     }
 }
