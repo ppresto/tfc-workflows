@@ -13,9 +13,9 @@ variable "repo_org" {}
 variable "repo_branch" { default = "master"}
 variable "global_remote_state" {default = ""}
 
-variable "aws_default_region" {}
-variable "aws_secret_access_key" {}
-variable "aws_access_key_id" {}
+variable "aws_default_region" { default = "us-west-1"}
+variable "aws_secret_access_key" {default = ""}
+variable "aws_access_key_id" {default = ""}
 
 variable "iam_teams" {
   default = {
