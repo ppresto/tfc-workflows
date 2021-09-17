@@ -4,10 +4,10 @@ data "tfe_team" "test" {
 }
 
 resource "tfe_team_token" "owner" {
-  team_id = tfe_team.test.id
+  team_id = data.tfe_team.test.id
 }
 
-module "gke_workspace" {
+module "ghactions_workspace" {
     source = "../modules/workspace-mgr-api"
     agent_pool_id     = ""
     organization = var.organization
