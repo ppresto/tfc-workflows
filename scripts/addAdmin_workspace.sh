@@ -33,7 +33,7 @@ git_url="https://github.com/ppresto/tfc-workflows.git"
 # Admin Workspace Config
 workspace="TFC_Admin"
 # This is the repo dir TFCB will use to run terraform and manage your workspaces with IaC
-WORKSPACE_DIR=""
+WORKSPACE_DIR="tfc_admin"
 BRANCH="main"
 TF_VERSION="1.0.5"
 
