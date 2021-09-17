@@ -1,5 +1,5 @@
 data "tfe_team" "test" {
-  name         = "owner"
+  name         = "owners"
   organization = var.organization
 }
 
