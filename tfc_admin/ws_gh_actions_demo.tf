@@ -30,6 +30,7 @@ module "ghactions_workspace" {
     }
     tf_variables = {
     "prefix" = "presto"
+     "TF_API_TOKEN"      = tfe_team_token.owner.token
     }
     tf_variables_sec = {
         "tfe_token"      = tfe_team_token.owner.token
