@@ -14,11 +14,8 @@ module "webapp_ghactions_ws" {
     env_variables = {
         "CONFIRM_DESTROY" : 1
         "AWS_DEFAULT_REGION"      : var.aws_default_region
-        "AWS_ACCESS_KEY_ID"       : var.aws_access_key_id
     }
-    env_variables_sec = {
-    "AWS_SECRET_ACCESS_KEY"        : var.aws_secret_access_key
-    }
+    env_variables_sec = {}
     tf_variables = {
     "prefix" = "presto"
      "TF_API_TOKEN"      = tfe_team_token.owner.token
