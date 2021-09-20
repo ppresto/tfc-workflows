@@ -3,7 +3,7 @@ module "webapp_ghactions_ws" {
     agent_pool_id     = ""
     organization = var.organization
     workspacename = "webapp"
-    workingdir = "webapp"
+    workingdir = ""
     tfversion = "1.0.5"
     queue_all_runs = false
     auto_apply = true
