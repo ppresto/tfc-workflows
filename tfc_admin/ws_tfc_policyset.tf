@@ -35,9 +35,7 @@ resource "tfe_policy_set" "org" {
   description            = "Organization Policies"
   organization           = var.organization
   policies_path          = "governance/third-generation/aws/"
-  workspace_ids          = [
-    "${local.workspaces["webapp_vcs"]}",
-  ]
+  workspace_ids          = []
 
   vcs_repo {
     identifier         = "${var.repo_org}/terraform-guides"
