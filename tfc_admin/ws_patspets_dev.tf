@@ -1,4 +1,4 @@
-module "webapp_vcs_ws" {
+module "patspets_ws" {
     source = "../modules/workspace-mgr-vcs"
     agent_pool_id     = ""
     organization = var.organization
