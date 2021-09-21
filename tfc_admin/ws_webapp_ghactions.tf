@@ -1,3 +1,12 @@
+data "tfe_team" "test" {
+  name         = "owners"
+  organization = var.organization
+}
+
+resource "tfe_team_token" "owner" {
+  team_id = data.tfe_team.test.id
+}
+
 module "webapp_ghactions_ws" {
     source = "../modules/workspace-mgr-api"
     agent_pool_id     = ""
