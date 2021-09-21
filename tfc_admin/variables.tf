@@ -10,7 +10,7 @@ variable "organization" { default = "presto-projects" }
 variable "tfe_token" {}
 variable "oauth_token_id" {}
 variable "repo_org" {}
-variable "repo_branch" { default = "master"}
+variable "repo_branch" { default = "main"}
 variable "global_remote_state" {default = ""}
 
 variable "aws_default_region" { default = "us-west-1"}
