@@ -36,8 +36,8 @@ resource "tfe_policy_set" "org" {
   organization           = var.organization
   policies_path          = "governance/third-generation/aws/"
   workspace_ids          = [
-    "${local.workspaces["aws_serviceA"]}",
-    "${local.workspaces["aws_serviceB"]}"
+    "${local.workspaces["patspets_dev"]}",
+    "${local.workspaces["webapp_vcs"]}"
   ]
 
   vcs_repo {
