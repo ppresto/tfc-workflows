@@ -1,22 +1,13 @@
-data "tfe_team" "test" {
-  name         = "owners"
-  organization = var.organization
-}
-
-resource "tfe_team_token" "owner" {
-  team_id = data.tfe_team.test.id
-}
-
-module "ghactions_workspace" {
-    source = "../modules/workspace-mgr-api"
+module "webapp_vcs_ws" {
+    source = "../modules/workspace-mgr-vcs"
     agent_pool_id     = ""
     organization = var.organization
-    workspacename = "gh-actions-demo"
+    workspacename = "webapp-vcs"
     workingdir = ""
     tfversion = "1.0.5"
     queue_all_runs = false
     auto_apply = true
-    identifier     = "${var.repo_org}/learn-terraform-github-actions"
+    identifier     = "${var.repo_org}/tfc-workflows"
     oauth_token_id = var.oauth_token_id
     repo_branch         = var.repo_branch
     global_remote_state = true
