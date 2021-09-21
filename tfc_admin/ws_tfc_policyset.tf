@@ -33,7 +33,7 @@ resource "tfe_policy_set" "org" {
   #count                  = "${var.policies_org ? 1 : 0}"
   name                   = "policy"
   description            = "Organization Policies"
-  organization           = "${var.tfe_organization}"
+  organization           = var.organization
   policies_path          = "governance/third-generation/aws/"
   workspace_ids          = [
     "${local.workspaces["aws_serviceA"]}",
@@ -50,7 +50,7 @@ resource "tfe_policy_set" "org" {
 
 data "tfe_workspace_ids" "all" {
   names        = ["*"]
-  organization = "${var.tfe_organization}"
+  organization = var.organization
 }
 
 locals {
