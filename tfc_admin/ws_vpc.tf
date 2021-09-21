@@ -3,13 +3,13 @@ module "vpc_ws" {
     agent_pool_id     = ""
     organization = var.organization
     workspacename = "vpc"
-    workingdir = ""
-    tfversion = "0.11.14"
+    workingdir = "vpc"
+    tfversion = "1.0.5"
     queue_all_runs = false
     auto_apply = true
-    identifier     = "${var.repo_org}/tf-aws-standard-network"
+    identifier     = "${var.repo_org}/tfc-workflows"
     oauth_token_id = var.oauth_token_id
-    repo_branch         = "master"
+    repo_branch         = var.repo_branch
     global_remote_state = true
     env_variables = {
         "CONFIRM_DESTROY" : 1
@@ -18,8 +18,6 @@ module "vpc_ws" {
     env_variables_sec = {}
     tf_variables = {
     "prefix" = "presto-projects"
-    "organization" = var.organization
-    "ssh_key_name" = "ppresto-ptfe-dev-key"
     }
     tf_variables_sec = {}
 }
