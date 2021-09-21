@@ -26,7 +26,7 @@ module "webapp_ghactions_ws" {
     }
     env_variables_sec = {}
     tf_variables = {
-    "prefix" = "presto"
+    "prefix" = "presto-projects"
      "TF_API_TOKEN"      = tfe_team_token.owner.token
     }
     tf_variables_sec = {
